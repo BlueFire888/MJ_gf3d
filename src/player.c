@@ -7,6 +7,17 @@
 static int thirdPersonMode = 0;
 void player_think(Entity *self);
 void player_update(Entity *self);
+void player_free(Entity* self);
+
+
+void player_free(Entity* self) {
+    if (!self) return;
+    Player_data* p_data = (Player_data*)self->customData;
+    free(&p_data->p_inven);
+}
+
+
+static PlayerManager Player_manager = { 0 };
 
 Entity *player_new(Vector3D position)
 {
@@ -22,10 +33,16 @@ Entity *player_new(Vector3D position)
     ent->model = gf3d_model_load("models/dino.model");
     ent->think = player_think;
     ent->update = player_update;
+    ent->free = player_free;
     vector3d_copy(ent->position,position);
     ent->rotation.x = -GFC_PI;
     ent->rotation.z = -GFC_HALF_PI;
     ent->hidden = 1;
+    ent->health = 50;
+    ent->maxhealth = 100;
+    ent->speed_f = 1;
+    Player_manager.main_player = ent;
+
     return ent;
 }
 
@@ -39,6 +56,8 @@ void player_think(Entity *self)
     SDL_GetRelativeMouseState(&mx,&my);
     const Uint8 * keys;
     keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+    if (!self)return;
+    Uint8 factor = self->speed_f;
 
     mouse.x = mx;
     mouse.y = my;
@@ -48,6 +67,11 @@ void player_think(Entity *self)
     w = vector2d_from_angle(self->rotation.z - GFC_HALF_PI);
     right.x = w.x;
     right.y = w.y;
+
+    forward = vector3d_multiply(forward, vector3d(0.5, 0.5, 0.5));
+    right = vector3d_multiply(right, vector3d(0.5, 0.5, 0.5));
+    forward = vector3d_multiply(forward, vector3d(factor, factor, factor));
+    right = vector3d_multiply(right, vector3d(factor, factor, factor));
     if (keys[SDL_SCANCODE_W])
     {   
         vector3d_add(self->position,self->position,forward);
@@ -64,13 +88,13 @@ void player_think(Entity *self)
     {
         vector3d_add(self->position,self->position,-right);
     }
-    if (keys[SDL_SCANCODE_SPACE])self->position.z += 1;
-    if (keys[SDL_SCANCODE_Z])self->position.z -= 1;
+    if (keys[SDL_SCANCODE_SPACE])self->position.z += 0.5 * factor;
+    if (keys[SDL_SCANCODE_Z])self->position.z -= 0.5 * factor;
     
-    if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050;
-    if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050;
-    if (keys[SDL_SCANCODE_RIGHT])self->rotation.z -= 0.0050;
-    if (keys[SDL_SCANCODE_LEFT])self->rotation.z += 0.0050;
+    if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050 * factor;
+    if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050 * factor;
+    if (keys[SDL_SCANCODE_RIGHT])self->rotation.z -= 0.0050 * factor;
+    if (keys[SDL_SCANCODE_LEFT])self->rotation.z += 0.0050 * factor;
     
     if (mouse.x != 0)self->rotation.z -= (mouse.x * 0.001);
     if (mouse.y != 0)self->rotation.x += (mouse.y * 0.001);
@@ -104,6 +128,76 @@ void player_update(Entity *self)
     }
     gf3d_camera_set_position(position);
     gf3d_camera_set_rotation(rotation);
+}
+
+Vector3D player_position_get() {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return vector3d(0,0,0);
+    }
+    return ent->position;
+}
+
+void player_edit_gold(Uint32 gold_a) {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return;
+    }
+    Player_data* p_data = (Player_data*)ent->customData;
+    if (!p_data) {
+        slog("no more money");
+        return;
+    }
+    p_data->gold += gold_a;
+    slog("Gold: %d ", p_data->gold);
+    slog("Added Gold: %d ", gold_a);
+    ent->customData = p_data;
+}
+
+void player_heal(Uint32 heal_a) {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return;
+    }
+    ent->health = min((heal_a + ent->health),ent->maxhealth);
+}
+
+void player_boost() {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return;
+    }
+    ent->speed_f = 3;
+}
+
+void player_add_inven(char* item_name) {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return;
+    }
+    Player_data* p_data = (Player_data*)ent->customData;
+    if (!p_data) {
+        slog("L");
+        return;
+    }
+    Player_inven p_inven = p_data->p_inven;
+    p_inven.inven_count++;
+    slog("%d", p_inven.inven_max);
+    if (p_inven.inven_count > p_inven.inven_max) {
+        slog("cannot add to inventory");
+        return;
+    }
+    p_inven.inven[p_inven.inven_count].item_name = item_name;
 }
 
 /*eol@eof*/

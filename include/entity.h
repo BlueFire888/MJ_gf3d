@@ -35,6 +35,7 @@ typedef struct Entity_S
     void       (*draw)(struct Entity_S *self); /**<pointer to an optional extra draw funciton*/
     void       (*damage)(struct Entity_S *self, float damage, struct Entity_S *inflictor); /**<pointer to the think function*/
     void       (*onDeath)(struct Entity_S *self); /**<pointer to an funciton to call when the entity dies*/
+    void       (*free)(struct Entity_S* self); /** custom free function if needed*/
     
     EntityState state;
     
@@ -46,6 +47,8 @@ typedef struct Entity_S
     Vector3D    rotation;
     
     Uint32      health;     /**<entity dies when it reaches zero*/
+    Uint32      maxhealth;
+    Uint8       speed_f;
     // WHATEVER ELSE WE MIGHT NEED FOR ENTITIES
     struct Entity_S *target;    /**<entity to target for weapons / ai*/
     
