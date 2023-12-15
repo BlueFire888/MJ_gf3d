@@ -2,6 +2,7 @@
 #define __NPC_H__
 
 #include "entity.h"
+#include "items.h"
 
 typedef enum{
     NPC_dude = 0,
@@ -21,7 +22,7 @@ typedef struct {
     Uint32 gold_c;
 
     //NPC_obj
-    char* item_name;
+    Inven_item item;
     //ITEM TYPE HERE
 
     //NPC_heal

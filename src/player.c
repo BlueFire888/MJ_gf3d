@@ -3,6 +3,7 @@
 
 #include "gf3d_camera.h"
 #include "player.h"
+#include "Items.h"
 
 static int thirdPersonMode = 0;
 void player_think(Entity *self);
@@ -14,6 +15,11 @@ void player_free(Entity* self) {
     if (!self) return;
     Player_data* p_data = (Player_data*)self->customData;
     free(&p_data->p_inven);
+    free(p_data->party.members);
+    for (int i  = 0; i < 4; i++) {
+        free(&p_data->party.equipment[i]);
+    }
+    free(p_data->party.equipment);
 }
 
 
@@ -22,6 +28,7 @@ static PlayerManager Player_manager = { 0 };
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
+    int i = 0, j = 0;
     
     ent = entity_new();
     if (!ent)
@@ -41,8 +48,9 @@ Entity *player_new(Vector3D position)
     ent->health = 50;
     ent->maxhealth = 100;
     ent->speed_f = 1;
-    Player_manager.main_player = ent;
 
+    //make a reference to this player always avalaible 
+    Player_manager.main_player = ent;
     return ent;
 }
 
@@ -130,6 +138,15 @@ void player_update(Entity *self)
     gf3d_camera_set_rotation(rotation);
 }
 
+Entity* getPlayer() {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+    }
+    return ent;
+}
+
 Vector3D player_position_get() {
     Entity* ent = NULL;
     ent = Player_manager.main_player;
@@ -176,28 +193,6 @@ void player_boost() {
         return;
     }
     ent->speed_f = 3;
-}
-
-void player_add_inven(char* item_name) {
-    Entity* ent = NULL;
-    ent = Player_manager.main_player;
-    if (!ent) {
-        slog("UGH OHHHH, no player for you!");
-        return;
-    }
-    Player_data* p_data = (Player_data*)ent->customData;
-    if (!p_data) {
-        slog("L");
-        return;
-    }
-    Player_inven p_inven = p_data->p_inven;
-    p_inven.inven_count++;
-    slog("%d", p_inven.inven_max);
-    if (p_inven.inven_count > p_inven.inven_max) {
-        slog("cannot add to inventory");
-        return;
-    }
-    p_inven.inven[p_inven.inven_count].item_name = item_name;
 }
 
 /*eol@eof*/

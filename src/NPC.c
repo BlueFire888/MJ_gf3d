@@ -15,6 +15,7 @@
 
 #include "player.h"
 #include "NPC.h"
+#include "Items.h"
 
 void npc_update(Entity* self);
 
@@ -34,7 +35,7 @@ Entity* npc_new(Vector3D position)
     }
     ent->selectedColor = gfc_color(0.1, 0.1, 1, 1);
     ent->color = gfc_color(1, 1, 1, 1);
-    ent->model = gf3d_model_load("models/npc1.model");
+    ent->model = gf3d_model_load("models/npc2.model");
     ent->think = npc_think;
     ent->update = npc_update;
     vector3d_copy(ent->position, position);
@@ -86,7 +87,8 @@ void npc_think(Entity* self)
             case NPC_chest:
                 if (!self->hidden && keys[SDL_SCANCODE_F]) {
                     self->hidden = 1;
-                    player_add_inven(c_data->item_name);
+                    player_add_inven(c_data->item);
+                    equip_item(c_data->item, 0, 0);
                     break;
                 }
             case NPC_heal:
