@@ -64,52 +64,12 @@ int main(int argc,char *argv[])
     mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
     
-    npc = npc_new(vector3d(0,0,0));
-    Sphere aggro_r = gfc_sphere(npc->position.x, npc->position.y, npc->position.z, 50);
-    NPC_data c_data = { 0 };
-    c_data.range = aggro_r;
-    c_data.message = "Mission get: finish the game :(";
-    c_data.talking = 0;
-    c_data.type = NPC_dude;
-    npc->customData = &c_data;
+    npc = new_npc_from_config("config/npc1.json");
+    npc2 = new_npc_from_config("config/npc2.json");
+    npc3 = new_npc_from_config("config/npc3.json");
+    npc4 = new_npc_from_config("config/npc4.json");
+    npc5 = new_npc_from_config("config/npc5.json");
 
-    npc2 = npc_new(vector3d(200, 0, 0));
-    NPC_data c_data2 = { 0 };
-    c_data2.range = gfc_sphere(npc2->position.x, npc2->position.y, npc2->position.z, 50);;
-    c_data2.message = "Gold get!!!!";
-    c_data2.talking = 0;
-    c_data2.type = NPC_obj;
-    c_data2.gold_c = 50;
-    npc2->customData = &c_data2;
-
-    npc3 = npc_new(vector3d(-200, 0, 0));
-    NPC_data c_data3 = { 0 };
-    c_data3.range = gfc_sphere(npc3->position.x, npc3->position.y, npc3->position.z, 50);;
-    c_data3.message = "Obtained cool sword";
-    c_data3.talking = 0;
-    c_data3.type = NPC_chest;
-    Inven_item sword = {"Cool Sword", IT_sword,0,0,0,20,10,5,0,2};
-    c_data3.item = sword;
-    npc3->customData = &c_data3;
-
-    npc4 = npc_new(vector3d(-200, -200, 0));
-    NPC_data c_data4 = { 0 };
-    c_data4.range = gfc_sphere(npc4->position.x, npc4->position.y, npc4->position.z, 50);;
-    c_data4.message = "Healed!";
-    c_data4.talking = 0;
-    c_data4.type = NPC_heal;
-    c_data4.heal_ammount = 50;
-    npc4->customData = &c_data4;
-
-    npc5 = npc_new(vector3d(-200, -400, 0));
-    NPC_data c_data5 = { 0 };
-    c_data5.range = gfc_sphere(npc5->position.x, npc5->position.y, npc5->position.z, 50);;
-    c_data5.message = "Zoom!!!";
-    c_data5.talking = 0;
-    c_data5.type = NPC_boost;
-    npc5->customData = &c_data5;
-
-    if (npc)npc->selected = 1;
     w = world_load("config/testworld.json");
     
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -188,7 +148,6 @@ int main(int argc,char *argv[])
         gf3d_camera_update_view();
         gf3d_camera_get_view_mat4(gf3d_vgraphics_get_view_matrix());
 
-        c_data = *(NPC_data*)npc->customData;
         p_data = *(Player_data*)player->customData;
         p_inven = p_data.p_inven;
         p_party = p_data.party;
@@ -212,7 +171,7 @@ int main(int argc,char *argv[])
                 gf2d_font_draw_line_tag(outval, FT_H2, gfc_color(1, 1, 1, 1), vector2d(70, 10));
 
                 gf2d_font_draw_line_tag("Health:", FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 50));
-                sprintf(outval, "%d", player_stats.health + p_equiped_stats->health);
+                sprintf(outval, "%d", player_stats.health + p_equiped_stats->health + player->health);
                 gf2d_font_draw_line_tag(outval, FT_H2, gfc_color(1, 1, 1, 1), vector2d(70, 50));
                 
                 gf2d_font_draw_line_tag("Mana:", FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 70));
@@ -244,21 +203,24 @@ int main(int argc,char *argv[])
 
          ///       gf2d_draw_rect(gfc_rect(10, 10, 250, 70), gfc_color8(255, 255, 255, 255));
                 
-                if (c_data.talking) {
+                
+                //sprintf(outval, "%d", c_data.talking);
+                //slog(outval);
+                if ( ((NPC_data*)(npc->customData))->talking ) {
 
-                    gf2d_font_draw_line_tag(c_data.message, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
-                } else if (c_data2.talking) {
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                } else if ( ((NPC_data*)(npc2->customData))->talking ) {
 
-                    gf2d_font_draw_line_tag(c_data2.message, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc2->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
-                else if (c_data3.talking) {
-                    gf2d_font_draw_line_tag(c_data3.message, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                else if ( ((NPC_data*)(npc3->customData))->talking ) {
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc3->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
-                else if (c_data4.talking) {
-                    gf2d_font_draw_line_tag(c_data4.message, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                else if ( ((NPC_data*)(npc4->customData))->talking ) {
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc4->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
-                else if (c_data5.talking) {
-                    gf2d_font_draw_line_tag(c_data5.message, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                else if (((NPC_data*)(npc5->customData))->talking) {
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc5->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
 
                 gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);

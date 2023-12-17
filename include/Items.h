@@ -37,7 +37,7 @@ void player_remove_inven_last(Inven_item item);
 
 void player_remove_inven(Inven_item item, int position);
 
-void equip_item(Inven_item item, int character,int slot);
+void equip_item(Inven_item* item, int character,int slot);
 
 int is_noitem(Inven_item item);
 

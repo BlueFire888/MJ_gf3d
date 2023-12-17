@@ -35,7 +35,11 @@ typedef struct {
  * @param position where to spawn the aguman at
  * @return NULL on error, or an agumon entity pointer on success
  */
-Entity* npc_new(Vector3D position);
+Entity* npc_new();
+
+Entity* new_npc_from_config(char* filename);
+
+NPC_data* npc_data_from_config(SJson* json, Entity* self);
 
 
 #endif

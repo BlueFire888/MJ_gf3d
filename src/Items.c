@@ -68,7 +68,7 @@ void player_remove_inven(Inven_item item, int position) {
     p_data->p_inven.inven[position] = (Inven_item) NO_ITEM;
 }
 
-void equip_item(Inven_item item, int character, int slot) {
+void equip_item(Inven_item *item, int character, int slot) {
     Entity* ent = NULL;
     ent = getPlayer();
     if (!ent) {
@@ -87,8 +87,8 @@ void equip_item(Inven_item item, int character, int slot) {
         t_Item.is_equipped = 0;
         player_add_inven(t_Item);
     }   
-     item.is_equipped = 1;
-     c_equipment[slot] = item;
+     item->is_equipped = 1;
+     c_equipment[slot] = *item;
 }
 
 
