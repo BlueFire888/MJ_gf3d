@@ -13,10 +13,22 @@ typedef enum{
 }NPC_Type;
 
 typedef struct {
+    Uint8 max_depth;
+    Uint8 current_depth;
+    Uint8 *choices;
+
+}Tree_data;
+
+typedef struct {
     NPC_Type type;
     Sphere range;
-    char* message;
-    Uint8 talking;
+    
+    SJString* message;
+    Uint8 talking; // used to determine if the NPC is activley talking\ 
+    
+    Uint8 has_dtree; // the current message being displayed by an NPC has branching paths 
+    Tree_data t_data;
+    SJson* file; //Json file object that is associated with this npc
 
     //NPC_obj
     Uint32 gold_c;
@@ -40,6 +52,8 @@ Entity* npc_new();
 Entity* new_npc_from_config(char* filename);
 
 NPC_data* npc_data_from_config(SJson* json, Entity* self);
+
+SJson* get_next_message(SJson* cdatajson, Uint8* choice_array , int current_depth);
 
 
 #endif

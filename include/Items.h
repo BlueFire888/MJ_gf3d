@@ -18,7 +18,7 @@ typedef enum
 }Item_Type;
 
 typedef struct {
-    char* item_name;
+    SJString* item_name;
     Item_Type type;
     Uint8 is_equipped;
     Uint16 health;

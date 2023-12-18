@@ -4,6 +4,7 @@
 #include "gfc_input.h"
 #include "gfc_vector.h"
 #include "gfc_matrix.h"
+#include "gfc_audio.h"
 
 #include "gf3d_vgraphics.h"
 #include "gf3d_pipeline.h"
@@ -41,6 +42,7 @@ int main(int argc,char *argv[])
     Matrix4 skyMat;
     Model *sky;
     char* outval[128];
+    Mix_Music * main_bg_music = NULL;
 
     for (a = 1; a < argc;a++)
     {
@@ -50,6 +52,8 @@ int main(int argc,char *argv[])
         }
     }
     
+
+
     init_logger("gf3d.log",0);    
     gfc_input_init("config/input.cfg");
     slog("gf3d begin");
@@ -63,7 +67,18 @@ int main(int argc,char *argv[])
     
     mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
-    
+    //audio set up start
+    gfc_audio_init(64, 16, 4, 4, 1, 0);
+    main_bg_music = Mix_LoadMUS("music/Castle_Vein.mp3");
+    Mix_VolumeMusic(10);
+    if (!main_bg_music) {
+        slog("NO MORE MUSIC");
+    }
+    else {
+       Mix_PlayMusic(main_bg_music, INT_MAX);
+    }
+
+
     npc = new_npc_from_config("config/npc1.json");
     npc2 = new_npc_from_config("config/npc2.json");
     npc3 = new_npc_from_config("config/npc3.json");
@@ -201,26 +216,26 @@ int main(int argc,char *argv[])
 
 
 
-         ///       gf2d_draw_rect(gfc_rect(10, 10, 250, 70), gfc_color8(255, 255, 255, 255));
+         ///    gf2d_draw_rect(gfc_rect(10, 10, 250, 70), gfc_color8(255, 255, 255, 255));
                 
                 
                 //sprintf(outval, "%d", c_data.talking);
                 //slog(outval);
                 if ( ((NPC_data*)(npc->customData))->talking ) {
 
-                    gf2d_font_draw_line_tag( ((NPC_data*)(npc->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc->customData))->message->text , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 } else if ( ((NPC_data*)(npc2->customData))->talking ) {
 
-                    gf2d_font_draw_line_tag( ((NPC_data*)(npc2->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc2->customData))->message->text, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
                 else if ( ((NPC_data*)(npc3->customData))->talking ) {
-                    gf2d_font_draw_line_tag( ((NPC_data*)(npc3->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc3->customData))->message->text, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
                 else if ( ((NPC_data*)(npc4->customData))->talking ) {
-                    gf2d_font_draw_line_tag( ((NPC_data*)(npc4->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc4->customData))->message->text, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
                 else if (((NPC_data*)(npc5->customData))->talking) {
-                    gf2d_font_draw_line_tag( ((NPC_data*)(npc5->customData))->message , FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
+                    gf2d_font_draw_line_tag( ((NPC_data*)(npc5->customData))->message->text, FT_H2, gfc_color(1, 1, 1, 1), vector2d(10, 30));
                 }
 
                 gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
@@ -233,6 +248,7 @@ int main(int argc,char *argv[])
     
     vkDeviceWaitIdle(gf3d_vgraphics_get_default_logical_device());    
     //cleanup
+    Mix_FreeMusic(main_bg_music);
     entity_system_close();
     slog("gf3d program end");
     slog_sync();
