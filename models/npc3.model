@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/npc4/girlmodel.obj",
+        "texture":"models/NPCs/npc4/girl1.png"
+    }
+}

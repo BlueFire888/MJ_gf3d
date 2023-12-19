@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/Chest/Chestani11.obj",
+        "texture":"models/NPCs/Chest/OldChestAlbedo.png"
+    }
+}

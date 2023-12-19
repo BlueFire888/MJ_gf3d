@@ -149,4 +149,23 @@ void entity_update_all()
     }
 }
 
+void entity_quest_update(Entity* self)
+{
+    if (!self)return;
+    if (self->quest_update)self->quest_update(self);
+}
+
+void entity_quest_update_all()
+{
+    int i;
+    for (i = 0; i < entity_manager.entity_count; i++)
+    {
+        if (!entity_manager.entity_list[i]._inuse)// not used yet
+        {
+            continue;// skip this iteration of the loop
+        }
+        entity_quest_update(&entity_manager.entity_list[i]);
+    }
+}
+
 /*eol@eof*/

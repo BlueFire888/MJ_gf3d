@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/box/forestworldbox.obj",
+        "texture":"models/box/box_texture.png"
+    }
+}

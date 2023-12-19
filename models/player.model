@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/npc4/dudemodel.obj",
+        "texture":"models/NPCs/npc4/slapper.png"
+    }
+}

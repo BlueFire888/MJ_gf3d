@@ -9,7 +9,10 @@ typedef enum{
     NPC_obj,
     NPC_chest,
     NPC_heal,
-    NPC_boost
+    NPC_boost,
+    NPC_lost,
+    NPC_shop,
+    NPC_board
 }NPC_Type;
 
 typedef struct {
@@ -18,6 +21,7 @@ typedef struct {
     Uint8 *choices;
 
 }Tree_data;
+
 
 typedef struct {
     NPC_Type type;
@@ -40,6 +44,10 @@ typedef struct {
     //NPC_heal
     Uint32 heal_ammount;
 
+    int quest_counter;
+
+    Player_inven shop_inventory;
+
 } NPC_data;
 
 /**
@@ -55,5 +63,9 @@ NPC_data* npc_data_from_config(SJson* json, Entity* self);
 
 SJson* get_next_message(SJson* cdatajson, Uint8* choice_array , int current_depth);
 
+void npc_quest_update_3_1(Entity* self);
+void npc_quest_update_3_2(Entity* self);
+
+void npc_quest_update_1(Entity* self);
 
 #endif

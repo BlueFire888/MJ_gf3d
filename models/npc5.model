@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/npc1/otherraphtalia.obj",
+        "texture":"models/NPCs/npc1/body.png"
+    }
+}

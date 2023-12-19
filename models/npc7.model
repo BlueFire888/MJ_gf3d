@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/npc6/sign.obj",
+        "texture":"models/NPCs/npc6/medieval_house_texture.png"
+    }
+}

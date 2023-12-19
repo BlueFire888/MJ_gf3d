@@ -1,0 +1,14 @@
+{
+    "npc":
+    {
+        "model":"models/npc5.model",
+        "position":[-200,-200,-0]
+    },
+    "custom_data":
+    {
+        "type": 3,
+        "radius": 50,
+        "message":  "Super heal!",    
+        "heal_ammount": 50
+    }
+}

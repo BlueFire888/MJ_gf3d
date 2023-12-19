@@ -1,0 +1,23 @@
+{
+    "npc":
+    {
+        "model":"models/npc2.model",
+        "position":[0,-0,-0]
+    },
+    "custom_data":
+    {
+        "type": 0,
+        "radius": 50,
+        "message":  "Pleasure to meet you!",
+        "Dialogue_tree":{
+
+            "max_depth": 1, 
+            "branch1":{
+               "text": "That's facsinating!"
+            },
+            "branch2":{
+                "text": "Have a great day!"
+            }
+        }
+    }   
+}

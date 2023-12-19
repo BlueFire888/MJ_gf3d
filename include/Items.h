@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-#define NO_ITEM {"No Item",0,0,0,0,0,0,0,0,0}
+#define NO_ITEM {"No Item",0,0,0,0,0,0,0,0,0,0}
 
 typedef enum
 {
@@ -28,6 +28,7 @@ typedef struct {
     Uint16 magic_defense;
     Uint16 evasion;
     Uint8 speed;
+    Uint16 price;
     //STATS
 }Inven_item;
 

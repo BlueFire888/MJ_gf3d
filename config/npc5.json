@@ -1,0 +1,53 @@
+{
+    "npc":
+    {
+        "model":"models/npc3.model",
+        "position":[-200,-400,-0]
+    },
+    "custom_data":
+    {
+        "type": 6,
+        "radius": 50,
+        "message":  "Welcome to the shop!",
+        "Inventory":
+        [
+            {
+                "name": "Cool hat",
+                "type": 5,
+                "health": 200,
+                "mana": 20,
+                "attack": 0,
+                "phys_def": 0,
+                "elem_def": 0,
+                "evasion": 0,
+                "speed": 0,
+                "price" : 50
+            },
+            {
+                "name": "Cool armmor",
+                "type": 6,
+                "health": 100,
+                "mana": 0,
+                "attack": 0,
+                "phys_def": 40,
+                "elem_def": 20,
+                "evasion": 1,
+                "speed": 0,
+                "price" : 50
+            },
+            {
+                "name": "Cool accessory",
+                "type": 7,
+                "health": 100,
+                "mana": 10,
+                "attack": 10,
+                "phys_def": 10,
+                "elem_def": 10,
+                "evasion": 1,
+                "speed": 5,
+                "price" : 100
+            }
+
+        ]
+    }
+}

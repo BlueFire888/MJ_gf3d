@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/NPCs/npc4/boymodel.obj",
+        "texture":"models/NPCs/npc4/boy3colors.png"
+    }
+}

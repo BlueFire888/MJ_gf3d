@@ -1,0 +1,13 @@
+{
+    "npc":
+    {
+        "model":"models/npc4.model",
+        "position":[200,-0,-0]
+    },
+    "custom_data":
+    {
+        "type": 5,
+        "radius": 50,
+        "message":  "I'm lost :("
+    }
+}

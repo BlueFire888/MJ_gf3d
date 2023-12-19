@@ -11,6 +11,7 @@ void player_update(Entity *self);
 void player_free(Entity* self);
 
 
+
 void player_free(Entity* self) {
     if (!self) return;
     Player_data* p_data = (Player_data*)self->customData;
@@ -22,9 +23,8 @@ void player_free(Entity* self) {
     free(p_data->party.equipment);
 }
 
-
 static PlayerManager Player_manager = { 0 };
-
+    
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -101,18 +101,31 @@ void player_think(Entity *self)
     if (keys[SDL_SCANCODE_SPACE])self->position.z += 0.5 * factor;
     if (keys[SDL_SCANCODE_Z])self->position.z -= 0.5 * factor;
     
-    //if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050 * factor;
-    //if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050 * factor;
+    if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050 * factor;
+    if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050 * factor;
     if (keys[SDL_SCANCODE_RIGHT])self->rotation.z -= 0.0050 * factor;
     if (keys[SDL_SCANCODE_LEFT])self->rotation.z += 0.0050 * factor;
     
     if (mouse.x != 0)self->rotation.z -= (mouse.x * 0.001);
-    //if (mouse.y != 0)self->rotation.x += (mouse.y * 0.001);
+    if (mouse.y != 0)self->rotation.x += (mouse.y * 0.001);
 
     if (keys[SDL_SCANCODE_F3])
     {
         thirdPersonMode = !thirdPersonMode;
         self->hidden = !self->hidden;
+    }
+    if (keys[SDL_SCANCODE_P])
+    {
+        char* outval[128];
+        sprintf(outval, "%f", self->position.x);
+        slog("X:");
+        slog(outval);
+        sprintf(outval, "%f", self->position.y);
+        slog("Y:");
+        slog(outval);
+        sprintf(outval, "%f", self->position.z);
+        slog("Z:");
+        slog(outval);
     }
 }
 
@@ -195,6 +208,22 @@ void player_boost() {
         return;
     }
     ent->speed_f = 3;
+}
+
+int player_buy(int gold) {
+    Entity* ent = NULL;
+    ent = Player_manager.main_player;
+    if (!ent) {
+        slog("UGH OHHHH, no player for you!");
+        return;
+    }
+    Player_data* p_data = (Player_data*)(ent->customData);
+    if (p_data->gold - gold < 0) {
+        return 0; 
+    }
+    p_data->gold -= gold;
+    return 1;
+
 }
 
 /*eol@eof*/

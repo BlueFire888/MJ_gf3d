@@ -44,6 +44,7 @@ typedef struct {
 } Player_inven;
 
 typedef struct {
+    Uint8 in_shop;
     Uint32 gold;
     Player_inven p_inven;
     Player_Party party;
@@ -62,5 +63,6 @@ void player_edit_gold(Uint32 gold);
 void player_heal(Uint32 heal_a);
 
 void player_boost();
+int player_buy(int gold);
 
 #endif

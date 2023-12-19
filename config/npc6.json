@@ -1,0 +1,13 @@
+{
+    "npc":
+    {
+        "model":"models/npc7.model",
+        "position":[0, 300,-0]
+    },
+    "custom_data":
+    {
+        "type": 7,
+        "radius": 50,
+        "message":  "Quests obtained!!"
+    }
+}

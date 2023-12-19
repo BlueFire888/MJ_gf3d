@@ -1,0 +1,26 @@
+{
+    "npc":
+    {
+        "model":"models/npc6.model",
+        "position":[-200,0,0]
+    },
+    "custom_data":
+    {
+        "type": 2,
+        "radius": 50,
+        "message":  "Obtained even cooler sword",
+        "Item": {
+            "name": "Cooler sword",
+            "type": 1,
+            "health": 50,
+            "mana": 0,
+            "attack": 30,
+            "phys_def": 15,
+            "elem_def": 10,
+            "evasion": 0,
+            "speed": 2,
+            "price" : 50
+        }   
+
+    }
+}
